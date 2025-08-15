@@ -1,1 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>STAFFVIRTUAL • Proposal Builder</title>
+  </head>
+  <body style="font-family: system-ui; max-width: 900px; margin: 2rem auto">
+    <h1>STAFFVIRTUAL • Proposal Builder</h1>
+
+    <form id="proposalForm">
+      <label>Client name<br><input name="clientName" required></label><br><br>
+      <label>Company overview<br><textarea name="companyOverview"></textarea></label><br><br>
+      <label>Goals<br><textarea name="goals"></textarea></label><br><br>
+      <label>Services (comma-separated)<br><input name="services"></label><br><br>
+      <label>Notes<br><textarea name="notes"></textarea></label><br><br>
+      <button>Generate proposal</button>
+    </form>
+
+    <h2>Draft</h2>
+    <div id="out" style="white-space: pre-wrap;"></div>
+
+    <script>
+      const API_URL = localStorage.getItem("API_URL") || ""; // we'll set after Cloud Run deploy
+
+      document.getElementById("proposalForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const payload = {
+          clientName: fd.get("clientName"),
+          companyOverview: fd.get("companyOverview"),
+          goals: fd.get("goals"),
+          services: (fd.get("services") || "").split(",").map(s => s.trim()).filter(Boolean),
+          notes: fd.get("notes")
+        };
+        const res = await fetch(`${API_URL}/api/proposal`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        document.getElementById("out").textContent = data.proposal || "No proposal generated.";
+      });
+    </script>
+  </body>
+</html>
 
