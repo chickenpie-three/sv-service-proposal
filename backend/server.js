@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 const ai = new GoogleGenAI({}); // Will read GEMINI_API_KEY from env (Cloud Run)
-
+app.get("/healthz", (_req, res) => res.send("ok"));
 app.post("/api/proposal", async (req, res) => {
   try {
     const {
