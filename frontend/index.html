@@ -21,7 +21,7 @@
     <div id="out" style="white-space: pre-wrap;"></div>
 
     <script>
-      const API_URL = localStorage.getItem("API_URL") || ""; // we'll set after Cloud Run deploy
+      const API_URL = window.API_URL || localStorage.getItem("API_URL") || "";
 
       document.getElementById("proposalForm").addEventListener("submit", async (e) => {
         e.preventDefault();
