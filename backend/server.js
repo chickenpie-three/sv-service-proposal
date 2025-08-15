@@ -1,6 +1,14 @@
 // backend/server.js
 import express from "express";
 import cors from "cors";
+app.use(cors({
+  origin: [
+    "https://<your-frontend-service>.run.app"
+  ],
+  methods: ["GET","POST","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"]
+}));
+
 import { GoogleGenAI } from "@google/genai";
 
 const app = express();
